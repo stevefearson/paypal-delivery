@@ -1,6 +1,10 @@
 export default async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "https://www.fearson.online");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
   const { tx } = req.query;
-  const authToken = "JNpQRWAPwNn4sPt3shhD8ABgHc8OaZXyYTokU1-0L0tmIMaQYktsT6NhVTq"; // Replace with your actual PDT token
+  const authToken = "JNpQRWAPwNn4sPt3shhD8ABgHc8OaZXyYTokU1-0L0tmIMaQYktsT6NhVTq"; // Replace with your actual sandbox PDT token
 
   if (!tx) return res.status(400).json({ error: "Missing transaction ID" });
 
