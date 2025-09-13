@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   const { tx } = req.query;
-  const authToken = "FW-mX8Y5Y9IHpy6wKSsZsW3tveUH0YqQs1z9fu6zNC6IwZZZyEFrw5cskX0"; // Replace with your actual PDT token
+  const authToken = "JNpQRWAPwNn4sPt3shhD8ABgHc8OaZXyYTokU1-0L0tmIMaQYktsT6NhVTq"; // Replace with your actual PDT token
 
   if (!tx) return res.status(400).json({ error: "Missing transaction ID" });
 
