@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (!tx) return res.status(400).json({ error: "Missing transaction ID" });
 
   const payload = `cmd=_notify-synch&tx=${tx}&at=${authToken}`;
-  const response = await fetch("https://www.paypal.com/cgi-bin/webscr", {
+  const response = await fetch("https://www.sandbox.paypal.com/cgi-bin/webscr", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: payload,
