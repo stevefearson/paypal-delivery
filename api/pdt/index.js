@@ -4,33 +4,39 @@ module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
-    res.status(200).end(); // Respond to preflight
+    res.status(200).end();
     return;
   }
 
-const { tx } = req.query;
-const authToken = "JNpQRWAPwNn4sPt3shhD8ABgHc8OaZXyYTokU1-0L0tmIMaQYktsT6NhVTq"; // Replace with your actual sandbox PDT token
+  try {
+    const { tx } = req.query;
+    const authToken = "JNpQRWAPwNn4sPt3shhD8ABgHc8OaZXyYTokU1-0L0tmIMaQYktsT6NhVTq";
 
-if (!tx) return res.status(400).json({ error: "Missing transaction ID" });
+    if (!tx) {
+      return res.status(400).json({ error: "Missing transaction ID" });
+    }
 
-const payload = `cmd=_notify-synch&tx=${tx}&at=${authToken}`;
-const response = await fetch("https://www.sandbox.paypal.com/cgi-bin/webscr", {
-  method: "POST",
-  headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  body: payload,
-});
+    const payload = `cmd=_notify-synch&tx=${tx}&at=${authToken}`;
+    const response = await fetch("https://www.sandbox.paypal.com/cgi-bin/webscr", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: payload,
+    });
 
-const text = await response.text();
-const lines = text.split("\n");
-const data = {};
-lines.forEach(line => {
-const [key, value] = line.split("=");
-if (key && value) data[key.trim()] = decodeURIComponent(value.trim());
-});
+    const text = await response.text();
+    const lines = text.split("\n");
+    const data = {};
+    lines.forEach(line => {
+      const [key, value] = line.split("=");
+      if (key && value) data[key.trim()] = decodeURIComponent(value.trim());
+    });
 
-if (data["payment_status"] !== "Completed") {
-return res.status(403).json({ error: "Payment not completed" });
-}
+    if (data["payment_status"] !== "Completed") {
+      return res.status(403).json({ error: "Payment not completed", raw: text });
+    }
 
-res.status(200).json(data);
-}
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json({ error: "Server error", details: err.message });
+  }
+};
