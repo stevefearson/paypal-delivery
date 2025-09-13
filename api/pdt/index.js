@@ -2,15 +2,18 @@ module.exports = async (req, res) => {
   // Allow requests from Blogger domains and your domain
   const allowedOrigins = ['https://www.fearson.online', 'https://www.blogger.com', 'http://www.blogger.com', 'https://www.blogspot.com', 'http://www.blogspot.com'];
   const origin = req.headers.origin;
+
+  app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "https://example.com");
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  next();
+})
   
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
   
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Content-Type', 'application/json');
 
   if (req.method === "OPTIONS") {
     res.status(200).end();
