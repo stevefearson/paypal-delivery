@@ -1,6 +1,6 @@
 module.exports = async (req, res) => {
   // Allow requests from Blogger domains and your domain
-  const allowedOrigins = ['https://www.fearson.online', 'https://www.blogger.com', 'http://www.blogger.com'];
+  const allowedOrigins = ['https://www.fearson.online', 'https://www.blogger.com', 'http://www.blogger.com', 'https://www.blogspot.com', 'http://www.blogspot.com'];
   const origin = req.headers.origin;
   
   if (allowedOrigins.includes(origin)) {
